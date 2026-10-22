@@ -90,6 +90,7 @@ The `.xpi` is signed by Mozilla, stays installed and updates itself. If a releas
 - The holder analysis reads GMGN in the background. If GMGN asks for its security check, open gmgn.ai once and confirm it.
 - fomo theses and callers appear when you are logged in on fomo.
 - For the AI analysis, be logged in on chatgpt.com and click *Analyze with ChatGPT* in the AI tab.
+- The website check (is the contract address on the project website?) needs access to project websites, which can be on any domain. Grant it once with *Allow website checks* (Project tab or the extension's options page).
 - X posts are searched in a background tab while you are logged in on x.com. An experimental search without a tab can be switched on under Settings → Socials.
 
 ## Updates

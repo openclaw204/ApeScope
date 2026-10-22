@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Narrower permissions: ApeScope only gets access to the sites and data services it uses. Access to all websites is now optional and only needed for the website check (contract address on the project website) and a custom Solana RPC; it is granted on the extension's settings page with *Allow website checks*.
+
 ## 1.0.2
 
 - Firefox: new add-on ID for the listing on Firefox Add-ons, minimum version Firefox 140 (Android 142), which the data collection declaration needs.

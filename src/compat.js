@@ -70,6 +70,8 @@
     renderText: url => api.runtime.sendMessage({ type: 'aps-render-text', url }),
     gmgn: req => api.runtime.sendMessage({ type: 'aps-gmgn', chain: req.chain, ca: req.ca }).then(r => r || { ok: false, error: 'no answer from the background script' }),
     installType: () => api.runtime.sendMessage({ type: 'aps-install-type' }),
+    allSites: () => api.runtime.sendMessage({ type: 'aps-all-sites' }).then(Boolean, () => false),
+    openOptions: () => api.runtime.sendMessage({ type: 'aps-open-options' }),
   };
 
   // Toolbar button → show / hide the sidebar on fomo.family.

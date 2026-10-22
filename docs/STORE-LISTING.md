@@ -57,7 +57,8 @@ ApeScope helps users evaluate a memecoin while they view it on fomo.family by sh
 - **downloads:** used only when the user drops a new release file into Settings → Updates; the files of an unpacked install are written into its own folder in Downloads.
 - **cookies:** reads only the x.com `ct0` cookie, and only when the user switches on "Search X without a tab", to send the x.com search with the user's own session.
 - **scripting:** used only when the user clicks "Check the CA in a browser tab" to read the visible text of a project's website and look for the contract address.
-- **Host permission `<all_urls>`:** ApeScope requests data from many public APIs (DexScreener, GoPlus, Jupiter, GeckoTerminal, pump.fun, RugCheck, Honeypot.is, Solana RPC, GitHub, FxTwitter, RDAP), checks project websites that can be on any domain for the contract address, and supports a user-defined Solana RPC URL. Content scripts only run on fomo.family, pump.fun, x.com, gmgn.ai and chatgpt.com.
+- **Host permissions:** only the sites ApeScope runs on (fomo.family, pump.fun, x.com, gmgn.ai, chatgpt.com) and the public data services it requests (DexScreener, GoPlus, Honeypot.is, GeckoTerminal, RugCheck, Jupiter, Solana RPC, pump.fun API, GitHub, FxTwitter, RDAP).
+- **Optional host permission `<all_urls>`:** not granted at install. Only requested when the user clicks *Allow website checks* on the extension's options page, to look for the contract address on a token's project website (which can be on any domain) and to use a custom Solana RPC URL. Pages are fetched as text without cookies.
 - **Remote code:** No. All code is in the package; nothing is downloaded and executed.
 
 ## Chrome: data usage (privacy practices)

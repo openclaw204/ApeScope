@@ -16,7 +16,7 @@
  */(() => {
   'use strict';
 
-  const VERSION = '1.0.2';
+  const VERSION = '1.0.3';
   const APP = 'ApeScope';
   const K = Object.freeze({
     query: 'aps:query', xFeedPrefix: 'aps:x:', xHealth: 'aps:x-health', xError: 'aps:x-error',
@@ -1332,6 +1332,11 @@
         const young = w?.rdap?.registered && Date.now() - w.rdap.registered < 30 * 86400000;
         if (w?.page?.caIn) parts.push('CA found in ' + w.page.caIn.replace(/^api /, 'the site API '));
         infoRow(box, 'Website', l.url, parts.join(' · '), w?.page ? (w.page.hasCA ? 'shows CA' : w.page.otherCa?.length ? 'other CA' : 'no CA') : '', young || w?.page?.otherCa?.length ? 'bad' : w?.page?.hasCA ? 'good' : '');
+        if (w?.needsAccess && extHost?.openOptions) {
+          const ar = el('div', { class: 'line' }, box);
+          button(ar, 'Allow website checks', () => extHost.openOptions(), 'primary');
+          el('span', { class: 'sub', text: 'Needs access to project websites (asked once, on the extension\'s settings page).' }, ar);
+        }
         if (w?.page?.ok && !w.page.hasCA && extHost?.renderText) {
           const rr = el('div', { class: 'line' }, box);
           button(rr, s.renderCheck === l.url ? 'Checking in a tab…' : 'Check the CA in a browser tab', () => renderCaCheck(l.url));
@@ -1590,6 +1595,11 @@
     // ---- Tab: Settings -----------------------------------------------------------------------
     function renderSettings(parent) {
       renderUpdates(parent);
+      if (extHost?.openOptions) {
+        const wb = section(parent, 'Website check');
+        el('div', { class: 'sub', text: s.siteAccess === false ? 'Off: ApeScope has no access to project websites, so it cannot look for the CA there.' : 'Looks for the contract address on project websites and GitHub. Access to project websites is managed on the extension\'s settings page.' }, wb);
+        button(el('div', { class: 'line' }, wb), s.siteAccess === false ? 'Allow website checks' : 'Open the settings page', () => extHost.openOptions(), s.siteAccess === false ? 'primary' : '');
+      }
       const toggle = (box, key, name, after) => {
         const l = el('label', { class: 'opt' }, box), cb = el('input', { type: 'checkbox' }, l); cb.checked = !!prefs[key]; el('span', { text: name }, l);
         cb.addEventListener('change', () => { prefs[key] = cb.checked; put(LOCAL.preferences, prefs); after?.(cb.checked); render(); });
@@ -2286,17 +2296,20 @@
       const handles = [...new Set(links.filter(l => l.kind === 'X').map(l => xHandleOf(l.url)).filter(Boolean).map(h => h.toLowerCase()))].slice(0, 2);
       if (!sites.length && !handles.length) { s.intel = { key, web: [], x: [] }; return; }
       s.loading.intel = true; scheduleRender();
+      // Project websites can be on any domain: fetching them needs the optional all-sites permission (options page).
+      const pageAccess = extHost?.allSites ? await extHost.allSites() : true;
+      s.siteAccess = pageAccess;
       const web = await Promise.all(sites.map(async l => {
-        const domain = registrableDomain(new URL(l.url).hostname), out = { url: l.url, domain, rdap: null, page: null, error: '' };
+        const domain = registrableDomain(new URL(l.url).hostname), out = { url: l.url, domain, rdap: null, page: null, error: '', needsAccess: !pageAccess };
         const [rd, pg] = await Promise.allSettled([
           cached('rdap:' + domain, 6 * 3600e3, async () => normalizeRdap(await requestJson('https://rdap.org/domain/' + encodeURIComponent(domain), { headers: { Accept: 'application/rdap+json, application/json' } }))),
-          cached('page:' + l.url + ':' + coin.ca, 1800e3, async () => {
+          !pageAccess ? Promise.reject(Error('no access to project websites')) : cached('page:' + l.url + ':' + coin.ca, 1800e3, async () => {
             const r = await requestPage(l.url), a = { status: r.status, ok: r.status >= 200 && r.status < 400, finalUrl: r.finalUrl, ...analyzePage(r.html, coin.ca) };
             if (a.ok && !a.hasCA) Object.assign(a, await deepCaScan(r.finalUrl || l.url, r.html, coin.ca));
             delete a.scripts; return a;
           })]);
         if (rd.status === 'fulfilled') out.rdap = rd.value; else out.rdapError = rd.reason?.message || 'failed';
-        if (pg.status === 'fulfilled') out.page = pg.value; else out.error = pg.reason?.message || 'failed';
+        if (pg.status === 'fulfilled') out.page = pg.value; else if (pageAccess) out.error = pg.reason?.message || 'failed';
         return out;
       }));
       const x = await Promise.all(handles.map(async h => {

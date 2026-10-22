@@ -418,6 +418,8 @@ api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === 'aps-update-file') { installFromFile(msg).then(sendResponse, e => sendResponse({ ok: false, error: String(e?.message || e) })); return true; }
   if (msg?.type === 'aps-x-search') { xSearch(msg).then(r => sendResponse(r || { ok: false, code: 'http', error: 'X search returned nothing (step: ' + xState.step + ')' }), e => sendResponse({ ok: false, code: 'http', error: `${String(e?.message || e)} (step: ${xState.step})` })); return true; }
   if (msg?.type === 'aps-gmgn') { gmgnFetch(msg).then(sendResponse, e => sendResponse({ ok: false, error: String(e?.message || e) })); return true; }
+  if (msg?.type === 'aps-all-sites') { api.permissions.contains({ origins: ['<all_urls>'] }).then(v => sendResponse(!!v), () => sendResponse(false)); return true; }
+  if (msg?.type === 'aps-open-options') { api.runtime.openOptionsPage().then(() => sendResponse(true), () => sendResponse(false)); return true; }
   if (msg?.type === 'aps-install-type') { (api.management?.getSelf?.() || Promise.resolve(null)).then(m => sendResponse(m?.installType || ''), () => sendResponse('')); return true; }
   if (msg?.type === 'aps-update-apply') { sendResponse({ ok: true }); setTimeout(() => api.runtime.reload(), 100); return true; }
   return false;

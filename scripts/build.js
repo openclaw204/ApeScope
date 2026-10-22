@@ -31,6 +31,12 @@ function checkVersions() {
   }
 }
 
+// Services ApeScope requests data from. Project websites (any domain) need the optional all-sites permission,
+// which the user grants on the options page when switching on the website check.
+const API_ORIGINS = ['https://api.dexscreener.com/*', 'https://api.gopluslabs.io/*', 'https://api.honeypot.is/*', 'https://api.geckoterminal.com/*',
+  'https://api.rugcheck.xyz/*', 'https://lite-api.jup.ag/*', 'https://public.rpc.solanavibestation.com/*', 'https://api.mainnet-beta.solana.com/*',
+  'https://frontend-api-v3.pump.fun/*', 'https://fun-block.pump.fun/*', 'https://api.github.com/*', 'https://raw.githubusercontent.com/*',
+  'https://api.fxtwitter.com/*', 'https://rdap.org/*', 'https://abs.twimg.com/*'];
 const SITES = ['https://fomo.family/*', 'https://www.fomo.family/*', 'https://pump.fun/*', 'https://www.pump.fun/*', 'https://x.com/*', 'https://twitter.com/*', 'https://chatgpt.com/*', 'https://gmgn.ai/*'];
 function manifest(browser, updateBase = '', githubRepo = '') {
   const icons = { 16: 'icons/icon-16.png', 32: 'icons/icon-32.png', 48: 'icons/icon-48.png', 128: 'icons/icon-128.png' };
@@ -45,7 +51,9 @@ function manifest(browser, updateBase = '', githubRepo = '') {
     // opt-in X search without a tab (sent back to x.com only)
     permissions: ['storage', 'unlimitedStorage', 'downloads', 'cookies', 'scripting'],   // scripting: read a project website's rendered text on request
     // Any host: project websites, domain registries and an optional custom Solana RPC can be anywhere.
-    host_permissions: ['<all_urls>'],
+    host_permissions: [...SITES, ...API_ORIGINS],
+    optional_host_permissions: ['<all_urls>'],   // website checks on any project domain, a custom Solana RPC
+    options_ui: { page: 'options.html', open_in_tab: true },
     background: browser === 'firefox' ? { scripts: ['background.js'] } : { service_worker: 'background.js' },
     content_scripts: [
       { matches: SITES, js: ['compat.js', 'apescope.js'], run_at: 'document_start' },
@@ -87,6 +95,7 @@ function build({ updateBase = '', githubRepo = '' } = {}) {
     fs.writeFileSync(path.join(out, 'bridge.js'), bridgeBody);
     fs.writeFileSync(path.join(out, 'background.js'), backgroundBody(updateBase, githubRepo));
     fs.copyFileSync(path.join(root, 'src', 'compat.js'), path.join(out, 'compat.js'));
+    for (const f of ['options.html', 'options.js']) fs.copyFileSync(path.join(root, 'src', f), path.join(out, f));
     for (const n of [16, 32, 48, 128]) fs.copyFileSync(path.join(root, 'assets', 'brand', `icon-${n}.png`), path.join(out, 'icons', `icon-${n}.png`));
     fs.copyFileSync(path.join(root, 'LICENSE'), path.join(out, 'LICENSE')); fs.copyFileSync(path.join(root, 'NOTICE'), path.join(out, 'NOTICE'));
     const zip = path.join(dist, `apescope-${browser}-v${version}.zip`);

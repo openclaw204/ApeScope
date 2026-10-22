@@ -23,6 +23,11 @@ assert.equal(chrome.background.service_worker, 'background.js'); assert.ok(!chro
 assert.deepEqual(firefox.background.scripts, ['background.js']); assert.match(firefox.browser_specific_settings.gecko.strict_min_version, /^1[2-9]\d/);
 new vm.Script(mainBody); new vm.Script(bridgeBody);
 assert.ok(!/==UserScript==|@grant|@match/.test(mainBody + bridgeBody), 'no userscript headers left');
+for (const m of [chrome, firefox]) {   // narrow host access: all sites only as an optional permission (website checks)
+  assert.ok(!m.host_permissions.includes('<all_urls>'), 'no required access to all sites');
+  assert.deepEqual(m.optional_host_permissions, ['<all_urls>']); assert.equal(m.options_ui.page, 'options.html');
+  for (const h of ['https://api.dexscreener.com/*', 'https://gmgn.ai/*', 'https://x.com/*', 'https://frontend-api-v3.pump.fun/*']) assert.ok(m.host_permissions.includes(h), h);
+}
 
 // ---- Fake WebExtension API ----
 function fakeBrowser(responder = () => ({ ok: true, status: 200, responseText: '{}', responseHeaders: '' })) {

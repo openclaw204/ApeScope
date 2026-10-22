@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ApeScope settings</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#0b0f17;color:#e6edf6;font:15px/1.55 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  main{max-width:640px;margin:0 auto;padding:40px 20px}
+  h1{font-size:24px;margin:0 0 6px}h2{font-size:17px;margin:28px 0 8px}
+  p{color:#8d9bb2;margin:0 0 12px}
+  .card{background:#121926;border:1px solid #253248;border-radius:14px;padding:18px 20px}
+  button{font:inherit;font-weight:700;padding:10px 16px;border-radius:10px;border:0;cursor:pointer;background:linear-gradient(90deg,#19e07a,#00d4e6 55%,#0a8dff);color:#03141a}
+  button.secondary{background:#182233;color:#e6edf6;border:1px solid #253248}
+  .state{margin:12px 0 0;font-weight:600}.on{color:#3ddc97}.off{color:#f5a524}
+</style>
+</head>
+<body><main>
+  <h1>ApeScope</h1>
+  <p>Most settings are in the sidebar on fomo.family (⚙ tab). This page is only needed for the website check.</p>
+  <h2>Website check</h2>
+  <div class="card">
+    <p>ApeScope can look for the token's contract address on its project website and on GitHub, and check the domain age. Project websites can be on any domain, so this needs access to all websites. The pages are only fetched as text, without your cookies, and nothing is sent anywhere else.</p>
+    <p>The same access is used for a custom Solana RPC URL from the settings.</p>
+    <button id="allow">Allow website checks</button> <button id="remove" class="secondary">Remove access</button>
+    <p id="state" class="state"></p>
+  </div>
+</main>
+<script src="options.js"></script>
+</body>
+</html>
