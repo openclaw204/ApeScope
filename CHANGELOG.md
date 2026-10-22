@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- *Check for updates* in Chrome, Edge and Brave now always looks for a newer GitHub release. Before, Chrome's own store check answered "checked recently" for unpacked installs and the release check was skipped.
+
 ## 1.0.0
 
 First public release.

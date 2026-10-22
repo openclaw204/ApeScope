@@ -131,7 +131,7 @@
     }
   } catch {}
   window.__apescopeChartBridge = true;
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.1';
   const EVENT_INPUT = 'APESCOPE_CHART_EVENTS';
   const EVENT_HEALTH = 'APESCOPE_CHART_HEALTH';
   const ID = 'apescope-chart-layer';

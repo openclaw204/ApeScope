@@ -172,6 +172,16 @@ function fakeBrowser(responder = () => ({ ok: true, status: 200, responseText: '
     assert.equal(u.r.status, 'manual'); assert.equal(u.r.version, '1.2.0'); assert.ok(u.r.url.endsWith('/apescope-chrome.zip'), 'direct download of the Chrome zip');
     assert.ok(u.urls.some(x => x.startsWith('https://api.github.com/repos/owner/apescope/releases/latest')));
     assert.equal((await run('v1.0.0')).r.status, 'no_update', 'same version → nothing to do');
+    {   // Chrome answers "throttled" for unpacked installs: the GitHub release check still runs
+      const listeners = [];
+      const api = { runtime: { id: 'ext', getManifest: () => ({ version: '1.0.0' }), getURL: p => 'chrome-extension://x/' + p, requestUpdateCheck: async () => ({ status: 'throttled' }), onMessage: { addListener: cb => listeners.push(cb) }, onUpdateAvailable: { addListener() {} } },
+        action: { onClicked: { addListener() {} } }, tabs: {}, windows: {} };
+      const ctx = { chrome: api, console, setTimeout, clearTimeout, AbortController, URL, Promise, String, Number, Math, JSON, Array,
+        fetch: async url => ({ status: 200, url, headers: new Map(), text: async () => JSON.stringify({ tag_name: 'v1.3.0', html_url: 'https://github.com/owner/apescope/releases/tag/v1.3.0', assets: [] }) }) };
+      ctx.globalThis = ctx; vm.createContext(ctx); vm.runInContext(BGH, ctx);
+      const r = await new Promise(res => listeners[0]({ type: 'aps-update-check' }, { id: 'ext' }, res));
+      assert.equal(r.status, 'manual'); assert.equal(r.version, '1.3.0');
+    }
     assert.throws(() => require('../scripts/build').build({ githubRepo: 'not a repo' }), /owner\/repo/);
   }
   // ---- GMGN without a tab: background requests with the browser's cookies; Cloudflare page → fallback ----

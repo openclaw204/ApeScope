@@ -16,7 +16,7 @@
  */(() => {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.1';
   const APP = 'ApeScope';
   const K = Object.freeze({
     query: 'aps:query', xFeedPrefix: 'aps:x:', xHealth: 'aps:x-health', xError: 'aps:x-error',
@@ -1222,7 +1222,7 @@
       if (u.status === 'update_available') button(r, 'Update to ' + (u.version || 'new version'), () => extHost.applyUpdate(), 'primary');
       else if (u.status === 'manual' && u.url) r.append(link('Download ' + u.version, u.url, 'chip'));
       else button(r, u.status === 'checking' ? 'Checking…' : 'Check for updates', () => checkForUpdate(true));
-      const msg = { no_update: 'You have the latest version.', throttled: 'Checked recently — try again later.', error: 'Update check failed' + (u.error ? ': ' + u.error : '') + '.',
+      const msg = { no_update: 'You have the latest version.', throttled: 'Checked recently, try again later.', error: 'Update check failed' + (u.error ? ': ' + u.error : '') + '.',
         manual: `Version ${u.version} is available — download it and replace the installed files.`, update_available: 'Click to install and restart ApeScope.' }[u.status];
       if (msg) el('div', { class: 'sub', text: msg }, box);
       if (extHost.installFile) renderFileUpdate(box);

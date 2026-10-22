@@ -53,7 +53,7 @@ async function checkUpdate() {
     const r = await api.runtime.requestUpdateCheck();
     const status = Array.isArray(r) ? r[0] : r?.status ?? r, version = (Array.isArray(r) ? r[1] : r)?.version || '';
     if (status === 'update_available') return { status, version };
-    if (status === 'throttled' && !UPDATE_INFO_URL) return { status };
+    if (status === 'throttled' && !UPDATE_INFO_URL && !UPDATE_GITHUB_REPO) return { status };   // otherwise ask our own release source
   } catch { /* unpacked / temporary installs cannot update themselves */ }
   // 2) Manually installed builds: compare with the published version.json and offer the download.
   if (UPDATE_INFO_URL) {
