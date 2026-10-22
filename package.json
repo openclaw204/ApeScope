@@ -1,0 +1,15 @@
+{
+  "name": "apescope",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Memecoin due-diligence browser extension for fomo.family: grouped risk checks, holder analysis, look-alike detection and one-click ChatGPT analysis.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node test/run.js",
+    "build": "node test/run.js && node scripts/build.js",
+    "sign:firefox": "node test/run.js && node scripts/build.js && npx --yes web-ext@8 sign --channel unlisted --source-dir dist/firefox --artifacts-dir dist/signed"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
