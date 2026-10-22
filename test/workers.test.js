@@ -37,30 +37,29 @@ async function chatgpt() {
   vm.runInContext(src + '\n' + WORKER('runChatGPT') + '\nrunChatGPT();', ctx);
   assert.ok(gm.map.get('aps:ai-worker')?.ts, 'heartbeat written');
 
+  // The worker only inserts the prompt; the user sends it, then the answer is read.
   gm.GM_setValue('aps:ai-request', { nonce: 'abc', kind: 'analysis', key: 'solana:' + ca, symbol: 'ROCKET', prompt: 'Please check ' + ca, autoSend: true, newChat: true, temporary: false, ts: clock });
+  assert.ok(await until(() => gm.map.get('aps:ai-result')?.status === 'waiting'));
+  assert.equal(composer.innerText, 'Please check ' + ca, 'prompt inserted');
+  assert.equal(messages.filter(m => m.role === 'user').length, 0, 'never sends by itself, even if a request asks for it');
+  sendBtn.click(); // the user presses Enter
   assert.ok(await until(() => ['done', 'error'].includes(gm.map.get('aps:ai-result')?.status)));
   const res = gm.map.get('aps:ai-result');
-  assert.equal(res.status, 'done', res.error); assert.equal(composer.innerText, 'Please check ' + ca, 'prompt inserted');
+  assert.equal(res.status, 'done', res.error);
   assert.equal(res.json.verdict, 'risky'); assert.equal(res.kind, 'analysis'); assert.equal(res.url, 'https://chatgpt.com/c/test');
 
   const sent = messages.filter(m => m.role === 'user').length;
   gm.GM_setValue('aps:ai-request', { nonce: 'abc', kind: 'analysis', prompt: 'x', ts: clock });
-  await wait(20); assert.equal(messages.filter(m => m.role === 'user').length, sent, 'same request is never sent twice');
+  await wait(20); assert.equal(composer.innerText, 'Please check ' + ca, 'same request is never inserted twice');
 
-  // Semi-automatic (default): insert only, wait for the user to press Enter, then read the answer.
-  gm.GM_setValue('aps:ai-request', { nonce: 'def', kind: 'analysis', key: 'solana:' + ca, prompt: 'Chart please', autoSend: false, newChat: false, ts: clock });
-  assert.ok(await until(() => gm.map.get('aps:ai-result')?.status === 'waiting'));
-  assert.equal(messages.filter(m => m.role === 'user').length, sent, 'worker did not send by itself');
-  sendBtn.click(); // the user presses Enter
-  assert.ok(await until(() => gm.map.get('aps:ai-result')?.status === 'done'));
-  assert.equal(gm.map.get('aps:ai-result').nonce, 'def');
-
-  // No answer within 30 minutes is not an error: the prompt was sent, the job stays 'sent'.
+  // No answer within 30 minutes is not an error: the job simply stays where it is.
   silent = true;
-  gm.GM_setValue('aps:ai-request', { nonce: 'ghi', kind: 'analysis', key: 'solana:' + ca, prompt: 'Slow one', autoSend: true, newChat: false, ts: clock });
-  assert.ok(await until(() => gm.map.get('aps:ai-result')?.nonce === 'ghi' && gm.map.get('aps:ai-result')?.status === 'sent'));
+  gm.GM_setValue('aps:ai-request', { nonce: 'ghi', kind: 'analysis', key: 'solana:' + ca, prompt: 'Slow one', newChat: false, ts: clock });
+  assert.ok(await until(() => gm.map.get('aps:ai-result')?.nonce === 'ghi' && gm.map.get('aps:ai-result')?.status === 'waiting'));
+  sendBtn.click();
   await wait(60);
-  assert.equal(gm.map.get('aps:ai-result').status, 'sent', 'no error after the waiting window');
+  assert.equal(gm.map.get('aps:ai-result').status, 'waiting', 'no error after the waiting window');
+  assert.equal(messages.filter(m => m.role === 'user').length, sent + 1);
 }
 
 // ---- GMGN worker: answers a request with three same-origin fetches ----

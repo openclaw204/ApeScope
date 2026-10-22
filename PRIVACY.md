@@ -18,7 +18,7 @@ These requests are made without your cookies, with two exceptions that only read
 - **gmgn.ai:** holder statistics are requested with your browser's gmgn.ai session (needed to pass gmgn.ai's security check).
 - **x.com:** only if you switch on *Search X without a tab* in the settings, the search for the contract address runs with your x.com session.
 
-On fomo.family, x.com, pump.fun, gmgn.ai and chatgpt.com, ApeScope reads data in your own tabs (for example theses, posts and callouts about the token) and, only after you click *Analyze with ChatGPT*, puts the prepared prompt into your ChatGPT tab.
+On fomo.family, x.com, pump.fun, gmgn.ai and chatgpt.com, ApeScope reads data in your own tabs (for example theses, posts and callouts about the token) and, only after you click *Analyze with ChatGPT*, puts the prepared prompt into your ChatGPT tab. You send it yourself; ApeScope never sends messages or posts anything on your behalf.
 
 ## Data stored on your device
 

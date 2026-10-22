@@ -212,7 +212,7 @@ T.LIVE.rpcGap = 0; T.LIVE.rpcRetry = 0;   // no RPC pacing in tests
   assert.equal(store.map.get('aps:ai:solana:' + ca).analysis.json.verdict, 'risky'); assert.equal(s.aiResults.analysis.url, 'https://chatgpt.com/c/abc');
   T.onAiResult({ nonce: 'n2', kind: 'evil', key: 'k', status: 'done', ts: Date.now() }); assert.ok(!store.map.has('aps:ai:k'), 'unknown kinds ignored');
   assert.ok(T.buildChecks().some(c => c.label === 'ChatGPT verdict' && c.level === 'bad'));
-  assert.deepEqual({ ...T.aiPrefsRef() }, { project: true, chart: true, screenshot: true, autoSend: true, newChat: true, temporary: false }, 'auto-send on, temporary chat off by default');
+  assert.deepEqual({ ...T.aiPrefsRef() }, { project: true, chart: true, screenshot: true, newChat: true, temporary: false }, 'no auto-send, temporary chat off by default');
 
   // Solana RPC: public fallback chain, custom RPC first
   assert.equal(await T.solRPC('getSlot', []), 111, 'Vibe Station rate-limited (429) → official endpoint answers');

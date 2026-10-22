@@ -16,7 +16,7 @@
  */(() => {
   'use strict';
 
-  const VERSION = '1.0.3';
+  const VERSION = '1.0.4';
   const APP = 'ApeScope';
   const K = Object.freeze({
     query: 'aps:query', xFeedPrefix: 'aps:x:', xHealth: 'aps:x-health', xError: 'aps:x-error',
@@ -1504,7 +1504,7 @@
     // The panel does not wait for ChatGPT: once the prompt is sent the job is done. If the answer can be read
     // back later it simply appears here.
     const AI_STATUS = { requested: 'Opening ChatGPT…', claimed: 'Opening ChatGPT…', navigating: 'Opening ChatGPT…', inserted: 'Inserting the prompt…',
-      waiting: 'Prompt is in ChatGPT — press Enter there', sent: 'Sent to ChatGPT ✓', running: 'Sent to ChatGPT ✓', done: 'Answer received ✓', error: 'Could not send' };
+      waiting: 'Prompt is in ChatGPT: press Enter there to send it', sent: 'Sent to ChatGPT ✓', running: 'Sent to ChatGPT ✓', done: 'Answer received ✓', error: 'Could not send' };
     function openChatGPT() { GM_openInTab(/^https:\/\/chatgpt\.com\//.test(s.aiJob?.url || '') ? s.aiJob.url : 'https://chatgpt.com/', { active: true, insert: true, reuse: true }); }
     function renderAi(parent) {
       const card = section(parent, 'ChatGPT analysis');
@@ -1528,7 +1528,7 @@
       }
       if (s.aiPrompt?.note) el('div', { class: 'sub', text: s.aiPrompt.note }, card);
       const opt = el('details', { class: 'card' }, card); el('summary', { text: 'Options' }, opt);
-      chk(opt, 'Send automatically', 'autoSend'); chk(opt, 'New chat for every analysis', 'newChat'); chk(opt, 'Temporary chat', 'temporary');
+      chk(opt, 'New chat for every analysis', 'newChat'); chk(opt, 'Temporary chat', 'temporary');
       if (s.aiResults?.analysis?.json) renderAiResult(parent, s.aiResults.analysis);   // only when ChatGPT's answer could be read back
       if (prefs.dev && s.aiPrompt) {
         const d = collapsible(parent, 'lastPrompt', 'Last prompt', s.aiPrompt.text.length + ' chars' + (s.aiPrompt.hasImage ? ' · screenshot' : ''));
@@ -2871,8 +2871,8 @@
       return L.join('\n').slice(0, 30000);
     }
 
-    // ---- ChatGPT hand-off (sends automatically by default; untick "Send automatically" to review the prompt first) ----
-    const DEFAULT_AI = { project: true, chart: true, screenshot: true, autoSend: true, newChat: true, temporary: false };
+    // ---- ChatGPT hand-off: the prompt is put into the user's ChatGPT tab, the user sends it (ApeScope never sends messages) ----
+    const DEFAULT_AI = { project: true, chart: true, screenshot: true, newChat: true, temporary: false };
     let aiPrefs = { ...DEFAULT_AI }; // loaded from storage in start()
     const aiWorkerOnline = () => { const hb = load(K.aiWorker, {}); return !!hb.ts && Date.now() - hb.ts < 90000; };
     const aiChatUrl = () => aiPrefs.temporary ? 'https://chatgpt.com/?temporary-chat=true' : 'https://chatgpt.com/';
@@ -2891,7 +2891,7 @@
         const prompt = trade ? await buildTradePrompt(snap, !!image) : await buildPrompt(snap, !!image);
         if (key !== curKey()) return alertLine('Token changed — cancelled');
         const req = { nonce: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), kind: 'analysis', key, coin, symbol: s.market?.symbol || '', prompt, image,
-          autoSend: aiPrefs.autoSend, newChat: aiPrefs.newChat, temporary: aiPrefs.temporary, ts: Date.now() };
+          newChat: aiPrefs.newChat, temporary: aiPrefs.temporary, ts: Date.now() };
         s.aiPrompt = { text: prompt, note, hasImage: !!image }; s.aiJob = { nonce: req.nonce, key, status: 'requested', ts: Date.now() };
         const online = aiWorkerOnline();
         put(K.aiRequest, req);
@@ -3204,7 +3204,6 @@
       // <textarea name="prompt"> and the send button was labelled "Send message" (verified in a browser).
       composer: ['#prompt-textarea', 'div.ProseMirror[contenteditable="true"]', 'textarea[name="prompt"]', 'form textarea'],
       // The send button has no stable id; its aria-label is localised, so the list also covers common UI languages.
-      send: ['button[data-testid="send-button"]', '#composer-submit-button', 'form button[type="submit"]', 'button[aria-label="Send prompt"]', 'button[aria-label*="send" i]', 'button[aria-label*="senden" i]', 'button[aria-label*="envoyer" i]', 'button[aria-label*="enviar" i]'],
       stop: ['button[data-testid="stop-button"]', 'button[aria-label*="stop" i]'],
       assistant: '[data-message-author-role="assistant"], [data-turn="assistant"]',
       fileInput: 'input[type="file"]',
@@ -3258,7 +3257,6 @@
       const c = first(SEL.composer); if (!c) return false;
       c.dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true })); return true;
     }
-    const sendButton = () => { const b = first(SEL.send); return b && !b.disabled && b.getAttribute('aria-disabled') !== 'true' ? b : null; };
     const generating = () => !!first(SEL.stop) || !!document.querySelector('.result-streaming');
     function readAnswer() {
       const all = assistants(), msg = all[all.length - 1];
@@ -3297,17 +3295,13 @@
         if (req.image) { if (!attachImage(req.image)) hint('ApeScope: the chart screenshot could not be attached.'); await sleep(1200); }
         await insertText(c, req.prompt);
         report(req, 'inserted');
-        if (req.autoSend) {
-          const b = await waitFor(sendButton, 90000, 500);
-          if (!b) throw Error('send button not available (is an upload stuck?)');
-          b.click(); report(req, 'sent');
-        } else { hint('ApeScope: prompt inserted — press Enter to send it.'); report(req, 'waiting'); }
+        hint('ApeScope: the prompt is ready. Press Enter to send it.'); report(req, 'waiting');
         // From here on nothing can fail: the prompt is in ChatGPT. Answers often take minutes, so the answer is
         // picked up in the background if it arrives within 30 minutes; otherwise the job simply stays "sent".
         const started = await waitFor(() => assistants().length > baseline, 30 * 60000, 1500);
         hideHint();
         if (!started) return;
-        if (!req.autoSend) report(req, 'sent');
+        report(req, 'sent');
         let last = '', stableSince = now();
         const end = now() + 30 * 60000;
         for (;;) {

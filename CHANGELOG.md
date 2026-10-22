@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+- ChatGPT: ApeScope puts the prepared prompt into your ChatGPT tab and you send it yourself with Enter. The *Send automatically* option is removed, ApeScope never sends messages for you.
+
 ## 1.0.3
 
 - Narrower permissions: ApeScope only gets access to the sites and data services it uses. Access to all websites is now optional and only needed for the website check (contract address on the project website) and a custom Solana RPC; it is granted on the extension's settings page with *Allow website checks*.

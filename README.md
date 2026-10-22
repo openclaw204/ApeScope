@@ -111,7 +111,7 @@ Firefox removes temporary add-ons when it closes. For a permanent install use Fi
 - No account, no API keys, no ApeScope server. Everything runs in your browser.
 - Public data services only see the contract address you look up. Requests from the extension never carry cookies, except to gmgn.ai and x.com, where your own login is used to read data for you.
 - No cookies, passwords, wallet keys or session tokens are stored or sent anywhere. ApeScope never connects to your wallet, never signs and never trades.
-- The ChatGPT tab is only used after you click *Analyze*.
+- The ChatGPT tab is only used after you click *Analyze*. ApeScope puts the prompt there and you send it yourself, it never sends messages for you.
 
 Full text: [PRIVACY.md](PRIVACY.md).
 
