@@ -104,6 +104,8 @@ The `.xpi` is signed by Mozilla, stays installed and updates itself. If a releas
 - No cookies, passwords, wallet keys or session tokens are stored or sent anywhere. ApeScope never connects to your wallet, never signs and never trades.
 - The ChatGPT tab is only used after you click *Analyze*.
 
+Full text: [PRIVACY.md](PRIVACY.md).
+
 ### Data sources
 
 All free, no API keys.
