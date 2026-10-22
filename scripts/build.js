@@ -53,7 +53,7 @@ function manifest(browser, updateBase = '', githubRepo = '') {
     ],
   };
   if (browser === 'firefox') {
-    m.browser_specific_settings = { gecko: { id: FIREFOX_ID, strict_min_version: '128.0', data_collection_permissions: { required: ['none'] } } };
+    m.browser_specific_settings = { gecko: { id: FIREFOX_ID, strict_min_version: '140.0', data_collection_permissions: { required: ['none'] } }, gecko_android: { strict_min_version: '142.0' } };   // data_collection_permissions needs Firefox 140 (Android 142)
     if (updateBase) m.browser_specific_settings.gecko.update_url = updateBase + '/updates.json';   // self-hosted, signed .xpi
     // Signed .xpi from GitHub releases: Firefox reads updates.json from the latest release and installs newer versions itself.
     else if (githubRepo) m.browser_specific_settings.gecko.update_url = `https://github.com/${githubRepo}/releases/latest/download/updates.json`;

@@ -16,7 +16,7 @@ A free, open source browser extension for <a href="https://fomo.family"><b>fomo.
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-3ddc97" alt="MIT License">
   <img src="https://img.shields.io/badge/Chrome-111%2B-1a73e8" alt="Chrome 111+">
-  <img src="https://img.shields.io/badge/Firefox-128%2B-ff7139" alt="Firefox 128+">
+  <img src="https://img.shields.io/badge/Firefox-140%2B-ff7139" alt="Firefox 140+">
   <img src="https://img.shields.io/badge/account-not%20needed-0a8dff" alt="No account needed">
   <img src="https://img.shields.io/badge/wallet-never%20connected-19e07a" alt="Wallet never connected">
 </p>
@@ -77,7 +77,7 @@ ApeScope is not in the browser stores yet, so you install it from the [latest re
 
 *Developer mode* is only a switch in your browser, no account or registration. It has to stay on, otherwise Chrome turns the extension off. Do not delete the folder, Chrome loads ApeScope from there.
 
-### Firefox 128+
+### Firefox 140+
 
 1. Click [`apescope-firefox.xpi`](../../releases/latest/download/apescope-firefox.xpi) in the latest release.
 2. Firefox asks whether it may install the add-on from github.com. Click **Continue to installation**, then **Add**.
