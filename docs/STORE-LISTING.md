@@ -1,5 +1,7 @@
 # Store listing texts
 
+Keep the store description free of lists of brand or service names: the Chrome Web Store rejects them as keyword spam.
+
 Texts and answers for the Chrome Web Store and Firefox Add-ons (addons.mozilla.org). Images: `assets/store/`.
 
 ## Name
@@ -17,16 +19,16 @@ ApeScope sits next to the chart on fomo.family and shows you what matters before
 ApeScope currently works on fomo.family token pages only.
 
 WHAT YOU GET
-• Risk checks sorted into red flags, warnings and good signs: liquidity against market cap, bump bots, contract flags, LP lock, sell simulation, rug report, organic trading score.
+• Risk checks sorted into red flags, warnings and good signs: liquidity against market cap, bump bots, contract flags, liquidity lock, sell simulation, organic trading score.
 • Real holders: top 10 without pools and bonding curves, bundlers, insiders, snipers, fresh wallets and wallets funded by the same source.
-• Developer history: tokens launched and migrated, whether the dev sold, who funded the wallet, renamed X accounts, reused logos.
-• Callers: fomo theses and pump.fun callouts with the biggest callers by followers, the market cap they called at and their best multiple.
-• Project check: the contract address is searched on the website and on GitHub; a different address is a red flag.
+• Developer history: tokens launched and migrated, whether the dev sold, who funded the wallet, renamed social accounts, reused logos.
+• Callers: theses and launchpad callouts with the biggest callers by followers, the market cap they called at and their best multiple.
+• Project check: the contract address is searched on the project website and code repository; a different address is a red flag.
 • Creator fees: who receives them, how much came in and how often it was claimed, read from the blockchain.
 • Copycat detection across chains, sorted by market cap, with the likely original marked.
-• Live data every few seconds: market cap, liquidity, buy and sell pressure, holder growth, activity from X, pump.fun and fomo.
-• ChatGPT: a full due diligence prompt or a trade setup with entries, stop and take profit levels, sent to your own ChatGPT tab.
-• Watchlist with alerts, chart markers for X posts and pump.fun calls.
+• Live data every few seconds: market cap, liquidity, buy and sell pressure, holder growth and social activity.
+• AI second opinion: a full due diligence prompt or a trade setup with entries, stop and take profit levels, opened in your own AI chat tab.
+• Watchlist with alerts and markers on the chart.
 
 PRIVACY
 No account, no ApeScope server, no tracking. ApeScope never connects to your wallet and never trades. Public data services only see the contract address you look up.
@@ -57,8 +59,8 @@ ApeScope helps users evaluate a memecoin while they view it on fomo.family by sh
 - **downloads:** used only when the user drops a new release file into Settings → Updates; the files of an unpacked install are written into its own folder in Downloads.
 - **cookies:** reads only the x.com `ct0` cookie, and only when the user switches on "Search X without a tab", to send the x.com search with the user's own session.
 - **scripting:** used only when the user clicks "Check the CA in a browser tab" to read the visible text of a project's website and look for the contract address.
-- **Host permissions:** only the sites ApeScope runs on (fomo.family, pump.fun, x.com, gmgn.ai, chatgpt.com) and the public data services it requests (DexScreener, GoPlus, Honeypot.is, GeckoTerminal, RugCheck, Jupiter, Solana RPC, pump.fun API, GitHub, FxTwitter, RDAP).
-- **Optional host permission `<all_urls>`:** not granted at install. Only requested when the user clicks *Allow website checks* on the extension's options page, to look for the contract address on a token's project website (which can be on any domain) and to use a custom Solana RPC URL. Pages are fetched as text without cookies.
+- **Host permissions:** only the sites ApeScope runs on (the token pages of fomo.family and the related sites the user is logged in to) and a fixed list of public market and blockchain data services it requests data from. Each one is listed in the manifest.
+- **Optional host permission `<all_urls>`:** not granted at install. It is only requested when the user clicks *Allow website checks* on the extension's options page, to look for the contract address on a token's project website, which can be on any domain, and to use a custom blockchain RPC address. Pages are fetched as text without cookies.
 - **Remote code:** No. All code is in the package; nothing is downloaded and executed.
 
 ## Chrome: data usage (privacy practices)
