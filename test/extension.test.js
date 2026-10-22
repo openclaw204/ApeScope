@@ -8,7 +8,7 @@ const { manifest, mainBody, bridgeBody, backgroundBody, version } = require('../
 const { until, wait } = require('./harness');
 
 const SHIM = fs.readFileSync(path.join(__dirname, '..', 'src', 'compat.js'), 'utf8');
-const BG = backgroundBody('https://apescope.example');
+const BG = backgroundBody();
 
 // ---- Manifests ----
 const chrome = manifest('chrome'), firefox = manifest('firefox');
@@ -99,7 +99,7 @@ function fakeBrowser(responder = () => ({ ok: true, status: 200, responseText: '
     const ok = await ask({ type: 'aps-xhr', url: 'https://a.example/x' });
     assert.equal(ok.status, 200); assert.equal(fetched.at(-1).credentials, 'omit');
   }
-  // ---- Updates: store / signed installs via requestUpdateCheck, manual installs via version.json ----
+  // ---- Updates: store installs via requestUpdateCheck ----
   {
     const run = async ({ check, info, firefox = false }) => {
       const listeners = [];
@@ -113,11 +113,9 @@ function fakeBrowser(responder = () => ({ ok: true, status: 200, responseText: '
     };
     assert.equal((await run({ check: async () => ({ status: 'update_available', version: '1.5.0' }) })).status, 'update_available', 'Chrome store update');
     assert.equal((await run({ check: async () => ['update_available', { version: '1.5.0' }] })).version, '1.5.0', 'Firefox result shape');
-    const manual = await run({ check: async () => { throw new Error('unpacked'); }, info: { version: '1.10.0', chrome: 'https://apescope.example/download/c.zip', firefox: 'https://apescope.example/download/f.xpi' } });
-    assert.equal(manual.status, 'manual'); assert.equal(manual.url, 'https://apescope.example/download/c.zip', 'version compare is numeric (1.10 > 1.4)');
+    assert.equal((await run({ check: async () => { throw new Error('unpacked'); } })).status, 'no_update', 'store build without release source');
     assert.equal((await run({ check: async () => ({ status: 'no_update' }), info: { version: '1.4.0' } })).status, 'no_update');
-    assert.ok(firefox.browser_specific_settings.gecko.update_url === undefined, 'no Firefox update_url without --update-base');
-    assert.equal(manifest('firefox', 'https://apescope.example').browser_specific_settings.gecko.update_url, 'https://apescope.example/updates.json');
+    assert.ok(firefox.browser_specific_settings.gecko.update_url === undefined, 'Firefox updates come from Firefox Add-ons');
   }
   // ---- Update from a release file: unpack, check, write into the extension folder, reload ----
   {
@@ -161,7 +159,7 @@ function fakeBrowser(responder = () => ({ ok: true, status: 200, responseText: '
   }
   // ---- Update check against the project's GitHub releases (repository set by the build) ----
   {
-    const BGH = backgroundBody('', 'owner/apescope');
+    const BGH = backgroundBody('owner/apescope');
     const run = async (tag, current = '1.0.0') => {
       const listeners = [];
       const api = { runtime: { id: 'ext', getManifest: () => ({ version: current }), getURL: p => 'chrome-extension://x/' + p, requestUpdateCheck: async () => { throw new Error('unpacked'); }, onMessage: { addListener: cb => listeners.push(cb) }, onUpdateAvailable: { addListener() {} } },

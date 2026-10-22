@@ -21,7 +21,7 @@ The script runs entirely offline and does the following:
 1. Checks that the version in `package.json` matches `src/apescope.js` and `src/bridge.js`.
 2. Writes `dist/firefox/` and `dist/chrome/`:
    - `apescope.js` = `src/apescope.js` wrapped in one function (`globalThis.__apescopeRun = function () { … };`) with a one-line comment header. This wrapper is the only generated code.
-   - `bridge.js`, `compat.js`, `background.js`, `LICENSE`, `NOTICE` and `icons/` are copied unchanged from `src/` and `assets/brand/`.
+   - `bridge.js`, `compat.js`, `background.js`, `options.html`, `options.js`, `LICENSE`, `NOTICE` and `icons/` are copied unchanged from `src/`, the repository root and `assets/brand/`.
    - `manifest.json` is generated from the `manifest()` function in `scripts/build.js`.
 3. Zips each folder to `dist/apescope-firefox-v<version>.zip` and `dist/apescope-chrome-v<version>.zip`.
 

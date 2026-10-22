@@ -5,9 +5,8 @@
  */
 'use strict';
 const api = globalThis.browser ?? globalThis.chrome;
-// Set by the build (--update-base): where version.json with the latest version lives. Empty = store updates only.
-const UPDATE_INFO_URL = '';
-// Set by the build (--github owner/repo, the release workflow passes its own repository): GitHub releases to check.
+// Set by the build (--github owner/repo, scripts/release.sh passes this repository): GitHub releases to check.
+// Empty in store builds, which the store updates.
 const UPDATE_GITHUB_REPO = '';
 
 async function doFetch({ method = 'GET', url, headers = {}, data = null, timeout = 15000 }) {
@@ -48,31 +47,21 @@ function newer(a, b) {
 }
 async function checkUpdate() {
   const current = api.runtime.getManifest().version, firefox = isFirefox();
-  // 1) Store installs and signed self-hosted Firefox builds: the browser fetches the update itself.
+  // 1) Store installs: the browser fetches the update itself.
   try {
     const r = await api.runtime.requestUpdateCheck();
     const status = Array.isArray(r) ? r[0] : r?.status ?? r, version = (Array.isArray(r) ? r[1] : r)?.version || '';
     if (status === 'update_available') return { status, version };
-    if (status === 'throttled' && !UPDATE_INFO_URL && !UPDATE_GITHUB_REPO) return { status };   // otherwise ask our own release source
+    if (status === 'throttled' && !UPDATE_GITHUB_REPO) return { status };   // otherwise ask the GitHub releases
   } catch { /* unpacked / temporary installs cannot update themselves */ }
-  // 2) Manually installed builds: compare with the published version.json and offer the download.
-  if (UPDATE_INFO_URL) {
-    const res = await doFetch({ url: UPDATE_INFO_URL + '?t=' + Date.now() });
-    if (res.ok && res.status === 200) {
-      try {
-        const info = JSON.parse(res.responseText);
-        if (info?.version && newer(info.version, current)) return { status: 'manual', version: String(info.version), url: String((firefox ? info.firefox : info.chrome) || info.page || '') };
-      } catch {}
-    }
-  }
-  // 3) GitHub releases of this project: offer the release page with the downloads.
+  // 2) Manually installed release builds: offer the download from the latest GitHub release.
   if (UPDATE_GITHUB_REPO) {
     const res = await doFetch({ url: `https://api.github.com/repos/${UPDATE_GITHUB_REPO}/releases/latest`, headers: { Accept: 'application/vnd.github+json' } });
     if (res.ok && res.status === 200) {
       try {
         const rel = JSON.parse(res.responseText), v = String(rel?.tag_name || '').replace(/^v/i, '');
         if (/^\d+\.\d+\.\d+$/.test(v) && newer(v, current)) {
-          const asset = (Array.isArray(rel.assets) ? rel.assets : []).find(a => a?.name === (firefox ? 'apescope-firefox.xpi' : '') || a?.name === `apescope-${firefox ? 'firefox' : 'chrome'}.zip`);
+          const asset = (Array.isArray(rel.assets) ? rel.assets : []).find(a => a?.name === `apescope-${firefox ? 'firefox' : 'chrome'}.zip`);
           return { status: 'manual', version: v, url: String(asset?.browser_download_url || rel.html_url || '') };
         }
       } catch {}

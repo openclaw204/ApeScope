@@ -11,7 +11,7 @@ ApeScope is a browser extension that shows information about memecoins next to t
 
 ## Data that leaves your browser
 
-To show information about the token you are looking at, ApeScope sends the token's contract address (and, for some lookups, addresses of its holders, its developer or its liquidity pool) to public data services: DexScreener, GoPlus, Honeypot.is, RugCheck, Jupiter, GeckoTerminal, pump.fun, a public Solana RPC (or the RPC you enter), GitHub, FxTwitter and RDAP. Website addresses found in the token's metadata are opened without cookies to look for the contract address.
+To show information about the token you are looking at, ApeScope sends the token's contract address (and, for some lookups, addresses of its holders, its developer or its liquidity pool) to public data services: DexScreener, GoPlus, Honeypot.is, RugCheck, Jupiter, GeckoTerminal, pump.fun, a public Solana RPC (or the RPC you enter), GitHub, FxTwitter and RDAP. Website addresses found in the token's metadata are opened without cookies to look for the contract address, but only after you allow website checks (*Allow website checks* in the Project tab or on the extension's options page); you can remove that access there at any time.
 
 These requests are made without your cookies, with two exceptions that only read data for you in sites where you are already logged in:
 

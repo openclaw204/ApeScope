@@ -16,9 +16,8 @@ The checks themselves do not depend on fomo. Detecting the token from the page a
 
 ## Store listings
 
-- Firefox Add-ons and the Chrome Web Store. Both review the extension; prepare short justifications for `<all_urls>` (project websites, domain registries, custom RPC) and for automating the ChatGPT tab.
-- Listing: screenshots (`assets/screenshots/`), short description, privacy statement ("no data collected; contract addresses are sent to public APIs to look them up").
-- Until then: the release zip (Chrome, Edge, Brave) and the signed `.xpi` (Firefox) on GitHub, see README → Signing.
+- Submitted to the Chrome Web Store and Firefox Add-ons, in review. When they are live, the README buttons link to the store pages.
+- Development builds stay available as zips in the GitHub releases.
 
 ## Smaller items
 

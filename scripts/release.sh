@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Publishes the version in package.json as a GitHub release of this repository:
-# tests, build (update check pointing at this repository), optional Firefox signing, tag, release with the files.
+# tests, build (update check pointing at this repository), tag, release with apescope-chrome.zip and apescope-firefox.zip.
 #
 #   scripts/release.sh
 #
-# Firefox is published on Firefox Add-ons. A self-distributed signed .xpi is only made with SIGN_FIREFOX=1 and
-# WEB_EXT_API_KEY / WEB_EXT_API_SECRET from addons.mozilla.org (Tools → Manage API Keys).
+# The release files are for manual installs and development. Store packages (Chrome Web Store, Firefox Add-ons) are
+# built with a plain `node scripts/build.js` and uploaded to the stores separately.
 # The release is created by the GitHub account the gh CLI uses (GH_TOKEN, if set).
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -18,15 +18,6 @@ grep -q "^## $version" CHANGELOG.md || { echo "CHANGELOG.md has no section for $
 
 npm test
 node scripts/build.js --github "$repo"
-
-if [ "${SIGN_FIREFOX:-}" = 1 ] && [ -n "${WEB_EXT_API_KEY:-}" ] && [ -n "${WEB_EXT_API_SECRET:-}" ]; then   # self-distributed .xpi, only if asked
-  rm -rf dist/signed
-  npx --yes web-ext@8 sign --channel unlisted --source-dir dist/firefox --artifacts-dir dist/signed
-  cp dist/signed/*.xpi dist/release/apescope-firefox.xpi
-  node scripts/firefox-updates.js "$repo" dist/release/apescope-firefox.xpi > dist/release/updates.json
-else
-  echo "No Firefox signing keys, the release gets the unsigned Firefox zip only."
-fi
 
 node -e "const v=process.argv[1],c=require('fs').readFileSync('CHANGELOG.md','utf8');const m=c.split(/^## /m).find(s=>s.startsWith(v));process.stdout.write(m?m.split('\n').slice(1).join('\n').trim()+'\n':'')" "$version" > dist/release-notes.md
 git tag -a "$tag" -m "ApeScope $version"

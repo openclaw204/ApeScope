@@ -9,9 +9,12 @@ A free, open source browser extension for <a href="https://fomo.family"><b>fomo.
 <p align="center"><b>🎯 Made for fomo.family.</b> ApeScope currently works on fomo token pages only.<br>More platforms and a native browser side panel may follow, depending on your feedback and how much it gets used.</p>
 
 <p align="center">
-  <a href="../../releases/latest/download/apescope-chrome.zip"><img src="https://img.shields.io/badge/Download-Chrome%20·%20Edge%20·%20Brave-1a73e8?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download for Chrome"></a>
-  <a href="../../releases/latest/download/apescope-firefox.zip"><img src="https://img.shields.io/badge/Download-Firefox-ff7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Download for Firefox"></a>
+  <!-- Store links: replace #install with the Chrome Web Store / Firefox Add-ons page once the listing is live. -->
+  <a href="#install"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-coming%20soon-1a73e8?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store: coming soon"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Firefox%20Add--ons-coming%20soon-ff7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-ons: coming soon"></a>
 </p>
+
+<p align="center"><sub>Works in Chrome, Edge and Brave (from the Chrome Web Store) and in Firefox. Development builds: <a href="../../releases/latest">latest release</a>.</sub></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-3ddc97" alt="MIT License">
@@ -66,37 +69,42 @@ Docked next to the chart. Click a screenshot to see it in full size.
 
 ## Install
 
-ApeScope is not in the browser stores yet, so you install it from the [latest release](../../releases/latest). It takes about a minute and you do it once.
+### From the browser store (recommended)
 
-### Chrome, Edge, Brave
+ApeScope is in review at the Chrome Web Store and at Firefox Add-ons. As soon as it is listed, the buttons at the top lead there: click *Add to Chrome* or *Add to Firefox* and you are done. Edge and Brave install it from the Chrome Web Store too. Store installs update themselves.
+
+### Manual install (development builds)
+
+The [latest release](../../releases/latest) has the same extension as a zip. Use it to try a version before it reaches the stores, or to build on the code.
+
+**Chrome, Edge, Brave**
 
 1. Download [`apescope-chrome.zip`](../../releases/latest/download/apescope-chrome.zip) and unzip it into a folder you keep, for example `Downloads/ApeScope`.
 2. Open `chrome://extensions` (Edge: `edge://extensions`, Brave: `brave://extensions`) and switch on **Developer mode** in the corner.
 3. Click **Load unpacked** and pick the folder.
 4. Pin the ApeScope icon and open any token on [fomo.family](https://fomo.family).
 
-*Developer mode* is only a switch in your browser, no account or registration. It has to stay on, otherwise Chrome turns the extension off. Do not delete the folder, Chrome loads ApeScope from there.
+Developer mode has to stay on, and the folder must not be deleted, Chrome loads ApeScope from there.
 
-### Firefox 140+
+**Firefox 140+**
 
-1. Click [`apescope-firefox.xpi`](../../releases/latest/download/apescope-firefox.xpi) in the latest release.
-2. Firefox asks whether it may install the add-on from github.com. Click **Continue to installation**, then **Add**.
-3. Open any token on [fomo.family](https://fomo.family).
+1. Download [`apescope-firefox.zip`](../../releases/latest/download/apescope-firefox.zip) and unzip it.
+2. Open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on** and pick `manifest.json` in the unzipped folder.
 
-The `.xpi` is signed by Mozilla, stays installed and updates itself. If a release has no `.xpi`, use the zip: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on** and pick `manifest.json` in the unzipped folder (Firefox removes it again when it closes).
+Firefox removes temporary add-ons when it closes. For a permanent install use Firefox Add-ons.
 
-**Good to know**
+### Good to know
 
 - The holder analysis reads GMGN in the background. If GMGN asks for its security check, open gmgn.ai once and confirm it.
 - fomo theses and callers appear when you are logged in on fomo.
 - For the AI analysis, be logged in on chatgpt.com and click *Analyze with ChatGPT* in the AI tab.
-- The website check (is the contract address on the project website?) needs access to project websites, which can be on any domain. Grant it once with *Allow website checks* (Project tab or the extension's options page).
+- The website check (is the contract address on the project website?) needs access to project websites, which can be on any domain. ApeScope does not get this access at install. Grant it once with *Allow website checks* (Project tab or the extension's options page) and remove it there at any time.
 - X posts are searched in a background tab while you are logged in on x.com. An experimental search without a tab can be switched on under Settings → Socials.
 
 ## Updates
 
-- **Firefox (.xpi):** updates install by themselves.
-- **Chrome, Edge, Brave:** ApeScope tells you in Settings → *Updates* when a new release is out. Download the new zip and drop it into *Install from file*, ApeScope replaces its files and restarts. This works when ApeScope was loaded from `Downloads/ApeScope`; otherwise unzip the new version over the old folder and click the reload icon on the extensions page.
+- **Installed from a store:** the browser installs updates automatically.
+- **Manual install:** ApeScope tells you in Settings → *Updates* when a new release is out. In Chrome, Edge and Brave, download the new zip and drop it into *Install from file*: ApeScope replaces its files and restarts (this works when it was loaded from `Downloads/ApeScope`; otherwise unzip the new version over the old folder and click the reload icon on the extensions page). In Firefox, load the new version as a temporary add-on again.
 
 ## Privacy
 
@@ -147,9 +155,14 @@ Solana gets the most checks (holders, clusters, fresh wallets, pump.fun, fee cla
 Not yet. ApeScope is made for fomo.family. Support for more trading sites and a native browser side panel are planned if enough people use it and ask for it.
 </details>
 
-<details><summary><b>Why do I need Developer mode in Chrome?</b></summary>
+<details><summary><b>Do I need Developer mode?</b></summary>
 
-Chrome only installs extensions from the Chrome Web Store without it. ApeScope is not listed there yet, so it is loaded as an unpacked extension. That is safe: you can read every line of the code in this repository.
+No, not when you install ApeScope from the Chrome Web Store or Firefox Add-ons. Developer mode is only needed for the manual install of a development build from the releases.
+</details>
+
+<details><summary><b>Why does ApeScope ask for access to all websites?</b></summary>
+
+It does not at install. That access is optional and only used for the website check: the project website of a token can be on any domain, so ApeScope can only look for the contract address there after you click *Allow website checks*. The pages are fetched as text, without your cookies.
 </details>
 
 <details><summary><b>Is this financial advice?</b></summary>
@@ -164,16 +177,20 @@ Step-by-step build instructions (for reviewers and to verify a release): [BUILD.
 
 ```bash
 npm test                                   # all tests (test/*.test.js)
-npm run build                              # tests, then dist/chrome, dist/firefox and dist/release/*.zip
-node scripts/build.js --github owner/repo  # + update check against that repository's GitHub releases
+npm run build                              # tests, then dist/chrome, dist/firefox and the zips (store packages)
+node scripts/build.js --github owner/repo  # release build: + update check against that repository's GitHub releases
 ```
+
+To try your changes, load `dist/chrome` with *Load unpacked* or `dist/firefox/manifest.json` as a temporary add-on in Firefox.
 
 ```
 src/apescope.js    content script: sidebar on fomo.family, workers on x.com, pump.fun, gmgn.ai, chatgpt.com
 src/bridge.js      page-context script: chart markers, chart snapshots, fomo and pump.fun responses
 src/compat.js      storage, request and tab API for apescope.js on top of the WebExtension APIs
 src/background.js  requests without cookies, GMGN and X requests with the browser session, tabs, updates
+src/options.*      options page: optional access to all websites for the website check
 scripts/build.js   builds the Chrome and Firefox extension and the release files
+scripts/release.sh tags a version and publishes the GitHub release
 assets/            logo, icons, screenshots
 docs/              roadmap and technical notes
 ```
@@ -181,18 +198,12 @@ docs/              roadmap and technical notes
 ### Releases
 
 1. Raise `version` in `package.json`, `src/apescope.js` and `src/bridge.js` and add a section to `CHANGELOG.md`, commit and push.
-2. Run `scripts/release.sh`.
-
-The script runs the tests, builds with the update check pointing at this repository, signs the Firefox build when signing keys are available, tags the version and publishes a GitHub release with `apescope-chrome.zip`, `apescope-firefox.zip` and, when signed, `apescope-firefox.xpi` plus `updates.json` for Firefox's automatic updates.
-
-**Signing**
-
-- **Firefox:** normal Firefox only keeps signed add-ons. Self-distributed ("unlisted") add-ons are signed automatically by addons.mozilla.org, without a store listing or review queue. Put an API key from addons.mozilla.org (*Tools → Manage API Keys*) into `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET` or `~/.config/apescope/amo.env` before running `scripts/release.sh`.
-- **Chrome:** Chrome installs extensions without Developer mode only from the Chrome Web Store, which needs a developer account with a one-time registration fee. Until then the release zip with *Load unpacked* is the way.
+2. Run `scripts/release.sh`: it runs the tests, builds with the update check pointing at this repository, tags the version and publishes a GitHub release with `apescope-chrome.zip` and `apescope-firefox.zip`.
+3. Build the store packages with `node scripts/build.js` (no GitHub update check, the stores handle updates) and upload `dist/apescope-chrome-v<version>.zip` to the Chrome Web Store and `dist/apescope-firefox-v<version>.zip` to Firefox Add-ons. Firefox Add-ons asks for the source code; [BUILD.md](BUILD.md) describes how reviewers rebuild it.
 
 ## Roadmap
 
-Depending on feedback and usage: a native browser side panel, support for more trading sites, store listings. See [docs/ROADMAP.md](docs/ROADMAP.md) and tell us in the [issues](../../issues) what you need.
+Depending on feedback and usage: a native browser side panel and support for more trading sites. See [docs/ROADMAP.md](docs/ROADMAP.md) and tell us in the [issues](../../issues) what you need.
 
 ## Contributing
 

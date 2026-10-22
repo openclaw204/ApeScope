@@ -1231,7 +1231,7 @@
     let filePicker = null;
     async function installUpdateFile(file) {
       if (!file) return;
-      if (!/\.(zip|xpi)$/i.test(file.name)) { s.fileUpdate = { error: 'Choose apescope-firefox-v….zip / .xpi or apescope-chrome-v….zip.' }; return render(); }
+      if (!/\.(zip|xpi)$/i.test(file.name)) { s.fileUpdate = { error: 'Choose apescope-chrome.zip or apescope-firefox.zip from the latest release.' }; return render(); }
       if (file.size > 20e6) { s.fileUpdate = { error: 'File too large.' }; return render(); }
       s.fileUpdate = { busy: true, name: file.name }; render();
       try {
@@ -1244,8 +1244,8 @@
     }
     function renderFileUpdate(box) {
       const f = s.fileUpdate || {};
-      if (s.installType === 'normal') {   // permanently installed (signed) build: the browser installs updates itself
-        el('div', { class: 'sub', text: 'To update by hand, drag the new .xpi / .zip onto the browser window (Firefox) or use the extension page (Chrome).' }, box);
+      if (s.installType === 'normal') {   // installed from the Chrome Web Store or Firefox Add-ons: the browser installs updates itself
+        el('div', { class: 'sub', text: 'Installed from the browser store: updates are installed automatically.' }, box);
         return;
       }
       el('div', { class: 'sub', text: 'Install from file', style: { marginTop: '10px', fontWeight: '600' } }, box);

@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "test": "node test/run.js",
-    "build": "node test/run.js && node scripts/build.js",
-    "sign:firefox": "node test/run.js && node scripts/build.js && npx --yes web-ext@8 sign --channel unlisted --source-dir dist/firefox --artifacts-dir dist/signed"
+    "build": "node test/run.js && node scripts/build.js"
   },
   "engines": {
     "node": ">=18"
