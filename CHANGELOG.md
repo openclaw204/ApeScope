@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Firefox: new add-on ID for the listing on Firefox Add-ons, minimum version Firefox 140 (Android 142), which the data collection declaration needs.
+
 ## 1.0.1
 
 - *Check for updates* in Chrome, Edge and Brave now always looks for a newer GitHub release. Before, Chrome's own store check answered "checked recently" for unpacked installs and the release check was skipped.

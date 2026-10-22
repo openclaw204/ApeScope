@@ -4,12 +4,11 @@
 #
 #   scripts/release.sh
 #
-# Firefox signing (optional): WEB_EXT_API_KEY and WEB_EXT_API_SECRET from addons.mozilla.org
-# (Tools → Manage API Keys), as environment variables or in ~/.config/apescope/amo.env.
+# Firefox is published on Firefox Add-ons. A self-distributed signed .xpi is only made with SIGN_FIREFOX=1 and
+# WEB_EXT_API_KEY / WEB_EXT_API_SECRET from addons.mozilla.org (Tools → Manage API Keys).
 # The release is created by the GitHub account the gh CLI uses (GH_TOKEN, if set).
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
-[ -f "$HOME/.config/apescope/amo.env" ] && . "$HOME/.config/apescope/amo.env"
 git diff --quiet && git diff --cached --quiet || { echo "Commit your changes first." >&2; exit 1; }
 version="$(node -p "require('./package.json').version")"; tag="v$version"
 repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
@@ -20,7 +19,7 @@ grep -q "^## $version" CHANGELOG.md || { echo "CHANGELOG.md has no section for $
 npm test
 node scripts/build.js --github "$repo"
 
-if [ -n "${WEB_EXT_API_KEY:-}" ] && [ -n "${WEB_EXT_API_SECRET:-}" ]; then
+if [ "${SIGN_FIREFOX:-}" = 1 ] && [ -n "${WEB_EXT_API_KEY:-}" ] && [ -n "${WEB_EXT_API_SECRET:-}" ]; then   # self-distributed .xpi, only if asked
   rm -rf dist/signed
   npx --yes web-ext@8 sign --channel unlisted --source-dir dist/firefox --artifacts-dir dist/signed
   cp dist/signed/*.xpi dist/release/apescope-firefox.xpi

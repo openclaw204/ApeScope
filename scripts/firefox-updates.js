@@ -8,4 +8,4 @@ if (!/^[\w.-]+\/[\w.-]+$/.test(repo || '') || !xpi) { console.error('usage: node
 const { version } = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
 const hash = 'sha256:' + crypto.createHash('sha256').update(fs.readFileSync(xpi)).digest('hex');
 const update_link = `https://github.com/${repo}/releases/download/v${version}/apescope-firefox.xpi`;
-process.stdout.write(JSON.stringify({ addons: { 'apescope@extension': { updates: [{ version, update_link, update_hash: hash }] } } }, null, 2) + '\n');
+process.stdout.write(JSON.stringify({ addons: { [require('./build').FIREFOX_ID]: { updates: [{ version, update_link, update_hash: hash }] } } }, null, 2) + '\n');

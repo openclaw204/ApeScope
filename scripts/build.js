@@ -19,7 +19,7 @@ const { execFileSync } = require('node:child_process');
 const root = path.join(__dirname, '..');
 const src = f => fs.readFileSync(path.join(root, 'src', f), 'utf8');
 const { version } = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-const FIREFOX_ID = 'apescope@extension';
+const FIREFOX_ID = '{fb73b986-e7e8-43db-979b-6006ca0a929f}';   // add-on ID on addons.mozilla.org (never change it once published)
 
 /** apescope.js is started by compat.js once the storage cache is loaded. */
 const mainBody = `/* ApeScope ${version} — MIT License */\nglobalThis.__apescopeRun = function () {\n${src('apescope.js')}\n};\n`;
@@ -108,7 +108,7 @@ function build({ updateBase = '', githubRepo = '' } = {}) {
   }
 }
 
-module.exports = { manifest, mainBody, bridgeBody, backgroundBody, version, build, checkVersions };
+module.exports = { FIREFOX_ID, manifest, mainBody, bridgeBody, backgroundBody, version, build, checkVersions };
 if (require.main === module) {
   const i = process.argv.indexOf('--update-base');
   const g = process.argv.indexOf('--github');

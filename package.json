@@ -1,6 +1,6 @@
 {
   "name": "apescope",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Memecoin due-diligence browser extension for fomo.family: grouped risk checks, holder analysis, look-alike detection and one-click ChatGPT analysis.",
   "license": "MIT",

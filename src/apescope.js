@@ -16,7 +16,7 @@
  */(() => {
   'use strict';
 
-  const VERSION = '1.0.1';
+  const VERSION = '1.0.2';
   const APP = 'ApeScope';
   const K = Object.freeze({
     query: 'aps:query', xFeedPrefix: 'aps:x:', xHealth: 'aps:x-health', xError: 'aps:x-error',
