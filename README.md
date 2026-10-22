@@ -159,6 +159,7 @@ No. The checks are signals, not guarantees. Always do your own research.
 ## Development
 
 No dependencies, no bundler. Node 18 or newer for tests and the build.
+Step-by-step build instructions (for reviewers and to verify a release): [BUILD.md](BUILD.md).
 
 ```bash
 npm test                                   # all tests (test/*.test.js)
