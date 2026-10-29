@@ -14,11 +14,6 @@ The extension injects the sidebar into fomo.family and moves the page aside. A n
 
 The checks themselves do not depend on fomo. Detecting the token from the page and drawing chart markers does, so every new site needs its own detection and chart bridge. Candidates: GMGN, Axiom, Padre, DexScreener, pump.fun token pages.
 
-## Store listings
-
-- Submitted to the Chrome Web Store and Firefox Add-ons, in review. When they are live, the README buttons link to the store pages.
-- Development builds stay available as zips in the GitHub releases.
-
 ## Smaller items
 
 - ChatGPT: an "Import answer" button that reads the latest reply from the ChatGPT tab on demand.

@@ -9,12 +9,11 @@ A free, open source browser extension for <a href="https://fomo.family"><b>fomo.
 <p align="center"><b>🎯 Made for fomo.family.</b> ApeScope currently works on fomo token pages only.<br>More platforms and a native browser side panel may follow, depending on your feedback and how much it gets used.</p>
 
 <p align="center">
-  <!-- Store links: replace #install with the Chrome Web Store / Firefox Add-ons page once the listing is live. -->
-  <a href="#install"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-coming%20soon-1a73e8?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Web Store: coming soon"></a>
-  <a href="#install"><img src="https://img.shields.io/badge/Firefox%20Add--ons-coming%20soon-ff7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-ons: coming soon"></a>
+  <a href="https://chromewebstore.google.com/detail/apescope/hciaeojokaohhggamodglfkmmhfgbeoh"><img src="https://img.shields.io/badge/Add%20to-Chrome%20·%20Edge%20·%20Brave-1a73e8?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Add to Chrome from the Chrome Web Store"></a>
+  <a href="https://addons.mozilla.org/firefox/addon/apescope/"><img src="https://img.shields.io/badge/Add%20to-Firefox-ff7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Add to Firefox from Firefox Add-ons"></a>
 </p>
 
-<p align="center"><sub>Works in Chrome, Edge and Brave (from the Chrome Web Store) and in Firefox. Development builds: <a href="../../releases/latest">latest release</a>.</sub></p>
+<p align="center"><sub>Works in Chrome, Edge and Brave (from the <a href="https://chromewebstore.google.com/detail/apescope/hciaeojokaohhggamodglfkmmhfgbeoh">Chrome Web Store</a>) and in Firefox (from <a href="https://addons.mozilla.org/firefox/addon/apescope/">Firefox Add-ons</a>). Development builds: <a href="../../releases/latest">latest release</a>.</sub></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-3ddc97" alt="MIT License">
@@ -71,7 +70,10 @@ Docked next to the chart. Click a screenshot to see it in full size.
 
 ### From the browser store (recommended)
 
-ApeScope is in review at the Chrome Web Store and at Firefox Add-ons. As soon as it is listed, the buttons at the top lead there: click *Add to Chrome* or *Add to Firefox* and you are done. Edge and Brave install it from the Chrome Web Store too. Store installs update themselves.
+- **Chrome, Edge, Brave:** open ApeScope in the [Chrome Web Store](https://chromewebstore.google.com/detail/apescope/hciaeojokaohhggamodglfkmmhfgbeoh) and click *Add to Chrome* (Edge and Brave install from the Chrome Web Store too).
+- **Firefox:** open ApeScope on [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/apescope/) and click *Add to Firefox*.
+
+Then pin the ApeScope icon and open any token on [fomo.family](https://fomo.family). Store installs update themselves.
 
 ### Manual install (development builds)
 
@@ -157,7 +159,7 @@ Not yet. ApeScope is made for fomo.family. Support for more trading sites and a 
 
 <details><summary><b>Do I need Developer mode?</b></summary>
 
-No, not when you install ApeScope from the Chrome Web Store or Firefox Add-ons. Developer mode is only needed for the manual install of a development build from the releases.
+No, not when you install ApeScope from the [Chrome Web Store](https://chromewebstore.google.com/detail/apescope/hciaeojokaohhggamodglfkmmhfgbeoh) or [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/apescope/). Developer mode is only needed for the manual install of a development build from the releases.
 </details>
 
 <details><summary><b>Why does ApeScope ask for access to all websites?</b></summary>
